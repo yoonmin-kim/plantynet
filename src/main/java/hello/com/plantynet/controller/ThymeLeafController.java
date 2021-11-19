@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,14 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import hello.com.plantynet.domain.DeliveryCode;
 import hello.com.plantynet.domain.Item;
+import hello.com.plantynet.domain.dto.ItemDto;
 import hello.com.plantynet.service.MemoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/thymeleaf")
 public class ThymeLeafController {
 
+	public static final String GLOBAL_ERROR_CODE = "required";
+	public static final String DEFAULT_GLOBAL_MESSAGE = "필수값을 확인해주세요";
 	private final MemoryService memoryService;
 
 	@ModelAttribute("deliveryCodes")
@@ -55,8 +62,15 @@ public class ThymeLeafController {
 	}
 
 	@PostMapping("/item")
-	public String save(@ModelAttribute Item item) {
-		memoryService.save(item);
+	public String save(@Validated @ModelAttribute("item") ItemDto itemDto, BindingResult bindingResult) {
+		if(itemDto.isGlobalError()){
+			bindingResult.reject(GLOBAL_ERROR_CODE, DEFAULT_GLOBAL_MESSAGE);
+		}
+		if (bindingResult.hasErrors()) {
+			log.info("errors = {}", bindingResult);
+			return "thymeleaf/addForm";
+		}
+		memoryService.save(itemDto);
 		return index();
 	}
 
@@ -82,8 +96,17 @@ public class ThymeLeafController {
 	}
 
 	@PostMapping("/editForm/{itemId}")
-	public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
-		memoryService.update(itemId, item);
+	public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemDto itemDto,
+		BindingResult bindingResult) {
+
+		if(itemDto.isGlobalError()){
+			bindingResult.reject(GLOBAL_ERROR_CODE, DEFAULT_GLOBAL_MESSAGE);
+		}
+		if (bindingResult.hasErrors()) {
+			log.info("errors = {}", bindingResult);
+			return "thymeleaf/editForm";
+		}
+		memoryService.update(itemId, itemDto);
 		return "redirect:/thymeleaf/editList";
 	}
 

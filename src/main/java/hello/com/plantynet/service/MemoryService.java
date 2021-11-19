@@ -1,11 +1,12 @@
 package hello.com.plantynet.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import hello.com.plantynet.domain.Item;
+import hello.com.plantynet.domain.dto.ItemDto;
 import hello.com.plantynet.repository.MemoryRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -14,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class MemoryService {
 
 	private final MemoryRepository memoryRepository;
+	private final ModelMapper modelMapper;
 
-	public void save(Item item) {
+	public void save(ItemDto itemDto) {
+		Item item = modelMapper.map(itemDto, Item.class);
 		memoryRepository.save(item);
 	}
 
@@ -31,7 +34,8 @@ public class MemoryService {
 		memoryRepository.deleteById(id);
 	}
 
-	public void update(Long id, Item updateItem) {
-		memoryRepository.update(id, updateItem);
+	public void update(Long id, ItemDto itemDto) {
+		Item item = modelMapper.map(itemDto, Item.class);
+		memoryRepository.update(id, item);
 	}
 }

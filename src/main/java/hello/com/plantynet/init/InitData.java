@@ -6,8 +6,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
 
-import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.ItemType;
+import hello.com.plantynet.domain.dto.ItemDto;
 import hello.com.plantynet.service.MemoryService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,17 +22,17 @@ public class InitData {
 	 */
 	@PostConstruct
 	public void init() {
-		Item item = new Item();
+		ItemDto item = new ItemDto();
 		item.setItemName("이불");
 		item.setPrice(10000);
 		item.setQuantity(100);
 		item.setDeliveryCode("NORMAL");
 		item.setOpen(true);
-		item.setRegions(Arrays.asList("JEJU","SEOUL"));
+		item.setRegions(Arrays.asList("JEJU", "SEOUL"));
 		item.setItemType(ItemType.ETC);
 		memoryService.save(item);
 
-		Item item2 = new Item();
+		ItemDto item2 = new ItemDto();
 		item2.setItemName("침대");
 		item2.setPrice(900000);
 		item2.setQuantity(50);
@@ -42,7 +42,7 @@ public class InitData {
 		item2.setItemType(ItemType.ETC);
 		memoryService.save(item2);
 
-		Item item3 = new Item();
+		ItemDto item3 = new ItemDto();
 		item3.setItemName("떡볶이");
 		item3.setPrice(12000);
 		item3.setQuantity(1000);
