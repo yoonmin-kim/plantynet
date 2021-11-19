@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>플랜티넷 미니프로젝트</title>
+</head>
+<body>
+<div class="container" style="max-width: 600px">
+
+    <div class="py-5 text-center">
+        <h2>상품 서비스</h2>
+    </div>
+
+        <div class="row g-2">
+            <div class="col-6">
+                <div class="p-3 bg-light">
+                    <button th:type="button" th:class="|btn btn-primary w-100 btn-lg|"
+                            th:onclick="|location.href='@{/thymeleaf/item}'|">등록</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 bg-light">
+                    <button th:type="button" th:class="|btn btn-primary w-100 btn-lg|"
+                            th:onclick="|location.href='@{/thymeleaf/list}'|">목록</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 bg-light">
+                    <button th:type="button" th:class="|btn btn-primary w-100 btn-lg|"
+                            th:onclick="|location.href='@{/thymeleaf/editList}'|">수정</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 bg-light">
+                    <button th:type="button" th:class="|btn btn-primary w-100 btn-lg|"
+                            th:onclick="|location.href='@{/thymeleaf/deleteList}'|">삭제</button>
+                </div>
+            </div>
+        </div>
+
+</div>
+</body>
+</html>

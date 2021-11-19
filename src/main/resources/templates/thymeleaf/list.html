@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>상품목록</title>
+</head>
+<body>
+<div class="container" style="max-width: 600px">
+
+    <div class="py-5 text-center">
+        <h2>상품목록</h2>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='index.html'"
+                    th:onclick="|location.href='@{/thymeleaf}'|"
+                    type="button">홈으로</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">상품번호</th>
+            <th scope="col">상품명</th>
+            <th scope="col">가격</th>
+            <th scope="col">수량</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <th scope="row" th:text="${item.id}">1</th>
+            <td th:text="${item.itemName}">Mark</td>
+            <td th:text="${item.price}">Otto</td>
+            <td th:text="${item.quantity}">@mdo</td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
