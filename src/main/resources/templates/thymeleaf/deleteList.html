@@ -17,7 +17,8 @@
             <button class="btn btn-primary float-end"
                     onclick="location.href='index.html'"
                     th:onclick="|location.href='@{/thymeleaf}'|"
-                    type="button">홈으로</button>
+                    type="button">홈으로
+            </button>
         </div>
     </div>
 
@@ -35,11 +36,16 @@
         </thead>
         <tbody>
         <tr th:each="item : ${items}">
-            <th scope="row"><a th:href="@{/thymeleaf/editForm/{itemId}(itemId=${item.id})}" th:text="${item.id}">1</a></th>
+            <th scope="row"><a th:href="@{/thymeleaf/editForm/{itemId}(itemId=${item.id})}" th:text="${item.id}">1</a>
+            </th>
             <td><a th:href="@{/thymeleaf/editForm/{itemId}(itemId=${item.id})}" th:text="${item.itemName}">Mark</a></td>
             <td th:text="${item.price}">Otto</td>
             <td th:text="${item.quantity}">@mdo</td>
-            <td><button th:onclick="|location.href='@{/thymeleaf/deleteList/{itemId}(itemId=${item.id})}'|">삭제</button></td>
+            <td>
+                <button class="btn btn-primary"
+                        th:onclick="|location.href='@{/thymeleaf/deleteList/{itemId}(itemId=${item.id})}'|">삭제
+                </button>
+            </td>
         </tr>
 
         </tbody>

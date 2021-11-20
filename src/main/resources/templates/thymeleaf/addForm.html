@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .field-error{
+        .field-error {
             border-color: #dc3545;
             color: #dc3545;
         }
@@ -25,17 +25,20 @@
 
         <div>
             <label th:for="itemName">상품명(필수값)</label>
-            <input type="text" th:field="*{itemName}" th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+            <input type="text" th:field="*{itemName}" th:errorclass="field-error" class="form-control"
+                   placeholder="이름을 입력하세요">
             <div class="field-error" th:errors="*{itemName}">상품명 오류</div>
         </div>
         <div>
             <label th:for="price">가격(필수값, 최소500원)</label>
-            <input type="text" th:field="*{price}" th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
+            <input type="text" th:field="*{price}" th:errorclass="field-error" class="form-control"
+                   placeholder="가격을 입력하세요">
             <div class="field-error" th:errors="*{price}">가격 오류</div>
         </div>
         <div>
             <label th:for="quantity">수량(필수값, 1000개제한)</label>
-            <input type="text" th:field="*{quantity}" th:errorclass="field-error" class="form-control" placeholder="수량을 입력하세요">
+            <input type="text" th:field="*{quantity}" th:errorclass="field-error" class="form-control"
+                   placeholder="수량을 입력하세요">
             <div class="field-error" th:errors="*{quantity}">수량 오류</div>
         </div>
 
@@ -45,7 +48,8 @@
             <select th:field="*{deliveryCode}" class="form-select">
                 <option value="">==배송 방식 선택==</option>
                 <option th:each="deliveryCode : ${deliveryCodes}" th:value="${deliveryCode.code}"
-                        th:text="${deliveryCode.displayName}">FAST</option>
+                        th:text="${deliveryCode.displayName}">FAST
+                </option>
             </select>
         </div>
 
@@ -67,14 +71,16 @@
                 <input type="checkbox" th:field="*{regions}" th:value="${region.key}"
                        class="form-check-input">
                 <label th:for="${#ids.prev('regions')}"
-                       th:text="${region.value}" class="form-check-label">서울</label> </div>
+                       th:text="${region.value}" class="form-check-label">서울</label>
+            </div>
         </div>
 
         <!-- radio button -->
         <div>
             <div>상품 종류</div>
-            <div th:each="type : ${T(hello.com.plantynet.domain.ItemType).values()}" class="form-check form-check-inline">
-                <input type="radio" th:field="*{itemType}" th:value="${type.name()}"class="form-check-input">
+            <div th:each="type : ${T(hello.com.plantynet.domain.ItemType).values()}"
+                 class="form-check form-check-inline">
+                <input type="radio" th:field="*{itemType}" th:value="${type.name()}" class="form-check-input">
                 <label th:for="${#ids.prev('itemType')}" th:text="${type.description}" class="form-check-label">
                     BOOK
                 </label>
@@ -89,7 +95,8 @@
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='items.html'"
                         th:onclick="|location.href='@{/thymeleaf}'|"
-                        type="button">취소</button>
+                        type="button">취소
+                </button>
             </div>
         </div>
 
