@@ -37,7 +37,7 @@ public class InitData {
 		item2.setPrice(900000);
 		item2.setQuantity(50);
 		item2.setDeliveryCode("SLOW");
-		item2.setOpen(true);
+		item2.setOpen(false);
 		item2.setRegions(Arrays.asList("BUSAN"));
 		item2.setItemType(ItemType.ETC);
 		memoryService.save(item2);

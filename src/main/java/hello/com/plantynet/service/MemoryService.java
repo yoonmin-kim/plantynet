@@ -17,9 +17,9 @@ public class MemoryService {
 	private final MemoryRepository memoryRepository;
 	private final ModelMapper modelMapper;
 
-	public void save(ItemDto itemDto) {
+	public Long save(ItemDto itemDto) {
 		Item item = modelMapper.map(itemDto, Item.class);
-		memoryRepository.save(item);
+		return memoryRepository.save(item);
 	}
 
 	public Item findById(Long id) {

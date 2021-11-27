@@ -15,9 +15,10 @@ public class MemoryRepository {
 	private static final Map<Long, Item> store = new HashMap<>();
 	private static long sequence = 1L;
 
-	public void save(Item item) {
+	public Long save(Item item) {
 		item.setId(sequence++);
 		store.put(item.getId(), item);
+		return item.getId();
 	}
 
 	public Item findById(Long id) {
