@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>로그인페이지</title>
+</head>
+<body>
+<div class="container" style="max-width: 600px">
+    <form class="form-signin" method="post" action="/login">
+        <div class="py-5 text-center">
+            <h2>로그인</h2>
+        </div>
+
+        <hr class="my-4">
+
+        <p>
+            <label for="username" class="sr-only">아이디</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="아이디" required
+                   autofocus>
+        </p>
+        <p>
+            <label for="password" class="sr-only">비밀번호</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
+        <a class="btn btn-lg btn-primary btn-block" th:href="@{/user/register}">회원가입</a>
+    </form>
+</div>
+</body>
+</html>
