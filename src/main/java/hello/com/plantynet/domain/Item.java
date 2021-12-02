@@ -3,8 +3,10 @@ package hello.com.plantynet.domain;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Item {
 
 	private Long id;

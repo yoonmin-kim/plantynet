@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hello.com.plantynet.repository.RegionMapper">
+
+    <insert id="save">
+        <selectKey keyProperty="id" resultType="java.lang.Long" order="BEFORE">
+            SELECT nextval('item') FROM DUAL;
+        </selectKey>
+        INSERT INTO regions(id, item_id, region)
+        values (#{id}, #{itemId}, #{region})
+    </insert>
+
+    <select id="findById" resultType="java.lang.String">
+        SELECT region
+        FROM regions
+        where item_id = #{itemId}
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM regions
+        where item_id = #{itemId}
+    </delete>
+
+</mapper>

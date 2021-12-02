@@ -2,25 +2,26 @@ package hello.com.plantynet.init;
 
 import java.util.Arrays;
 
-import javax.annotation.PostConstruct;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.ItemType;
 import hello.com.plantynet.domain.dto.ItemDto;
-import hello.com.plantynet.service.MemoryService;
+import hello.com.plantynet.service.ItemServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class InitData {
 
-	private final MemoryService memoryService;
+	private final ItemServiceImpl itemService;
+	private final ModelMapper modelMapper;
 
 	/**
 	 * 시연용 초기 데이터
 	 */
-	@PostConstruct
+	// @PostConstruct
 	public void init() {
 		ItemDto item = new ItemDto();
 		item.setItemName("이불");
@@ -30,7 +31,7 @@ public class InitData {
 		item.setOpen(true);
 		item.setRegions(Arrays.asList("JEJU", "SEOUL"));
 		item.setItemType(ItemType.ETC);
-		memoryService.save(item);
+		itemService.save(modelMapper.map(item, Item.class));
 
 		ItemDto item2 = new ItemDto();
 		item2.setItemName("침대");
@@ -40,7 +41,7 @@ public class InitData {
 		item2.setOpen(false);
 		item2.setRegions(Arrays.asList("BUSAN"));
 		item2.setItemType(ItemType.ETC);
-		memoryService.save(item2);
+		itemService.save(modelMapper.map(item2, Item.class));
 
 		ItemDto item3 = new ItemDto();
 		item3.setItemName("떡볶이");
@@ -50,7 +51,7 @@ public class InitData {
 		item3.setOpen(true);
 		item3.setRegions(Arrays.asList("JEJU", "SEOUL", "BUSAN"));
 		item3.setItemType(ItemType.FOOD);
-		memoryService.save(item3);
+		itemService.save(modelMapper.map(item3, Item.class));
 
 	}
 }

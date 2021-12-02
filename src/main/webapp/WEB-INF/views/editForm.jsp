@@ -11,6 +11,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
     <title>상품수정</title>
 </head>
 <body>
@@ -30,21 +36,21 @@
             <label for="itemName">상품명(필수값)</label>
             <form:input type="text" id="itemName" name="itemName" class="form-control"
                         placeholder="이름을 입력하세요" path="itemName" cssErrorClass="form-control field-error"/>
-            <div class="field-error"><form:errors path="itemName"/></div>
+            <div><form:errors cssClass="field-error" path="itemName"/></div>
         </div>
 
         <div>
             <label for="price">가격(필수값, 최소500원)</label>
             <form:input type="text" id="price" name="price" class="form-control"
                         placeholder="가격을 입력하세요" path="price" cssErrorClass="form-control field-error"/>
-            <div class="field-error"><form:errors path="price"/></div>
+            <div><form:errors cssClass="field-error" path="price"/></div>
         </div>
 
         <div>
             <label for="quantity">수량(필수값, 1000개제한)</label>
             <form:input type="text" id="quantity" name="quantity" class="form-control"
                         placeholder="수량을 입력하세요" path="quantity" cssErrorClass="form-control field-error"/>
-            <div class="field-error"><form:errors path="quantity"/></div>
+            <div><form:errors cssClass="field-error" path="quantity"/></div>
         </div>
 
         <!-- SELECT -->
@@ -94,7 +100,7 @@
 
         <div class="row">
             <div class="col">
-                <button class="w-100 btn btn-primary btn-lg" type="submit">상품 등록</button>
+                <button class="w-100 btn btn-primary btn-lg" type="submit">저장</button>
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
