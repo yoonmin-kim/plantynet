@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import hello.com.plantynet.domain.Item;
 
 @Repository
-public class MemoryRepository {
+public class MemoryRepository implements ItemRepository {
 
 	private static final Map<Long, Item> store = new HashMap<>();
 	private static long sequence = 1L;
@@ -29,12 +29,14 @@ public class MemoryRepository {
 		return new ArrayList<>(store.values());
 	}
 
-	public void deleteById(Long id) {
+	public int deleteById(Long id) {
 		store.remove(id);
+		return 1;
 	}
 
-	public void update(Long id, Item updateItem) {
+	public int update(Long id, Item updateItem) {
 		Item findItem = store.get(id);
 		findItem.update(updateItem);
+		return 1;
 	}
 }

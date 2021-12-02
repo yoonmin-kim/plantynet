@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import hello.com.plantynet.domain.DeliveryCode;
 import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.dto.ItemDto;
-import hello.com.plantynet.service.MemoryService;
+import hello.com.plantynet.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,8 @@ public class ThymeLeafController {
 
 	public static final String GLOBAL_ERROR_CODE = "required";
 	public static final String DEFAULT_GLOBAL_MESSAGE = "필수값을 확인해주세요";
-	private final MemoryService memoryService;
+	private final ItemService itemService;
+	private final ModelMapper modelMapper;
 
 	@ModelAttribute("deliveryCodes")
 	public List<DeliveryCode> deliveryCodes() {
@@ -63,34 +65,34 @@ public class ThymeLeafController {
 
 	@PostMapping("/item")
 	public String save(@Validated @ModelAttribute("item") ItemDto itemDto, BindingResult bindingResult) {
-		if(itemDto.isGlobalError()){
+		if (itemDto.isGlobalError()) {
 			bindingResult.reject(GLOBAL_ERROR_CODE, DEFAULT_GLOBAL_MESSAGE);
 		}
 		if (bindingResult.hasErrors()) {
 			log.info("errors = {}", bindingResult);
 			return "thymeleaf/addForm";
 		}
-		memoryService.save(itemDto);
+		itemService.save(modelMapper.map(itemDto, Item.class));
 		return index();
 	}
 
 	@GetMapping("/list")
 	public String list(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "thymeleaf/list";
 	}
 
 	@GetMapping("/editList")
 	public String editList(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "thymeleaf/editList";
 	}
 
 	@GetMapping("/editForm/{itemId}")
 	public String editForm(@PathVariable Long itemId, Model model) {
-		Item findItem = memoryService.findById(itemId);
+		Item findItem = itemService.findById(itemId);
 		model.addAttribute("item", findItem);
 		return "thymeleaf/editForm";
 	}
@@ -99,27 +101,27 @@ public class ThymeLeafController {
 	public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemDto itemDto,
 		BindingResult bindingResult) {
 
-		if(itemDto.isGlobalError()){
+		if (itemDto.isGlobalError()) {
 			bindingResult.reject(GLOBAL_ERROR_CODE, DEFAULT_GLOBAL_MESSAGE);
 		}
 		if (bindingResult.hasErrors()) {
 			log.info("errors = {}", bindingResult);
 			return "thymeleaf/editForm";
 		}
-		memoryService.update(itemId, itemDto);
+		itemService.update(itemId, modelMapper.map(itemDto, Item.class));
 		return "redirect:/thymeleaf/editList";
 	}
 
 	@GetMapping("/deleteList")
 	public String deleteList(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "thymeleaf/deleteList";
 	}
 
 	@GetMapping("/deleteList/{itemId}")
 	public String delete(@PathVariable Long itemId) {
-		memoryService.deleteById(itemId);
+		itemService.deleteById(itemId);
 		return "redirect:/thymeleaf/deleteList";
 	}
 }

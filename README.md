@@ -21,6 +21,7 @@
 
 * Thymeleaf 컨트롤러
 * JSP 컨트롤러
+* React 컨트롤러
   <br>
 
 ### [기능목록]

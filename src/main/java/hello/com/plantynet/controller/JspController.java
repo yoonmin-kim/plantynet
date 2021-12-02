@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import hello.com.plantynet.domain.DeliveryCode;
 import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.dto.ItemDto;
-import hello.com.plantynet.service.MemoryService;
+import hello.com.plantynet.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,8 @@ public class JspController {
 
 	public static final String GLOBAL_ERROR_CODE = "required";
 	public static final String DEFAULT_GLOBAL_MESSAGE = "필수값을 확인해주세요";
-	private final MemoryService memoryService;
+	private final ItemService itemService;
+	private final ModelMapper modelMapper;
 
 	@ModelAttribute("deliveryCodes")
 	public List<DeliveryCode> deliveryCodes() {
@@ -70,27 +72,27 @@ public class JspController {
 			log.info("errors = {}", bindingResult);
 			return "addForm";
 		}
-		memoryService.save(itemDto);
+		itemService.save(modelMapper.map(itemDto, Item.class));
 		return index();
 	}
 
 	@GetMapping("/list")
 	public String list(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "list";
 	}
 
 	@GetMapping("/editList")
 	public String editList(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "editList";
 	}
 
 	@GetMapping("/editForm/{itemId}")
 	public String editForm(@PathVariable Long itemId, Model model) {
-		Item findItem = memoryService.findById(itemId);
+		Item findItem = itemService.findById(itemId);
 		model.addAttribute("item", findItem);
 		return "editForm";
 	}
@@ -106,20 +108,20 @@ public class JspController {
 			log.info("errors = {}", bindingResult);
 			return "editForm";
 		}
-		memoryService.update(itemId, itemDto);
+		itemService.update(itemId, modelMapper.map(itemDto, Item.class));
 		return "redirect:/jsp/editList";
 	}
 
 	@GetMapping("/deleteList")
 	public String deleteList(Model model) {
-		List<Item> items = memoryService.findAll();
+		List<Item> items = itemService.findAll();
 		model.addAttribute("items", items);
 		return "deleteList";
 	}
 
 	@GetMapping("/deleteList/{itemId}")
 	public String delete(@PathVariable Long itemId) {
-		memoryService.deleteById(itemId);
+		itemService.deleteById(itemId);
 		return "redirect:/jsp/deleteList";
 	}
 }

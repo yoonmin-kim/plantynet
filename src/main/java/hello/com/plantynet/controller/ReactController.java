@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +23,7 @@ import hello.com.plantynet.domain.DeliveryCode;
 import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.ItemType;
 import hello.com.plantynet.domain.dto.ItemDto;
-import hello.com.plantynet.service.MemoryService;
+import hello.com.plantynet.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +35,8 @@ public class ReactController {
 
 	public static final String GLOBAL_ERROR_CODE = "required";
 	public static final String DEFAULT_GLOBAL_MESSAGE = "가격 * 수량 을 250,000 이상 맞춰주세요";
-	private final MemoryService memoryService;
+	private final ItemService itemService;
+	private final ModelMapper modelMapper;
 
 	@GetMapping("/deliveryCodes")
 	public List<DeliveryCode> deliveryCodes() {
@@ -73,17 +75,17 @@ public class ReactController {
 			return bindingResult.getAllErrors();
 		}
 
-		return new ResponseEntity(memoryService.save(itemDto), HttpStatus.CREATED);
+		return new ResponseEntity(itemService.save(modelMapper.map(itemDto, Item.class)), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/list")
 	public List<Item> list() {
-		return memoryService.findAll();
+		return itemService.findAll();
 	}
 
 	@GetMapping("/editForm/{itemId}")
 	public Item editForm(@PathVariable Long itemId) {
-		Item findItem = memoryService.findById(itemId);
+		Item findItem = itemService.findById(itemId);
 		return findItem;
 	}
 
@@ -98,13 +100,13 @@ public class ReactController {
 			log.info("errors = {}", bindingResult);
 			return bindingResult.getAllErrors();
 		}
-		memoryService.update(itemDto.getId(), itemDto);
+		itemService.update(itemDto.getId(), modelMapper.map(itemDto, Item.class));
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/deleteList/{itemId}")
 	public ResponseEntity delete(@PathVariable Long itemId) {
-		memoryService.deleteById(itemId);
+		itemService.deleteById(itemId);
 		List<Item> list = list();
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
