@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import hello.com.plantynet.domain.Account;
 import hello.com.plantynet.domain.dto.AccountDto;
-import hello.com.plantynet.service.UserService;
+import hello.com.plantynet.security.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -21,11 +21,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user")
 public class UserController {
 
-	private final UserService userService;
+	private final MyUserDetailsService userService;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 
-	@ModelAttribute("roles")
+	@ModelAttribute("/roles")
 	public Map<String, String> roles() {
 		Map<String, String> regions = new LinkedHashMap<>();
 		regions.put("USER", "ROLE_USER");
@@ -49,6 +49,6 @@ public class UserController {
 		Account account = modelMapper.map(accountDto, Account.class);
 		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		userService.save(account);
-		return "redirect:/thymeleaf";
+		return "redirect:/user/login";
 	}
 }

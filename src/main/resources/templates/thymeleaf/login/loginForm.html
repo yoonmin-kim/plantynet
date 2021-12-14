@@ -7,7 +7,8 @@
 </head>
 <body>
 <div class="container" style="max-width: 600px">
-    <form class="form-signin" method="post" action="/login">
+    <form class="form-signin" action="/login_proc" method="post">
+        <!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
         <div class="py-5 text-center">
             <h2>로그인</h2>
         </div>
