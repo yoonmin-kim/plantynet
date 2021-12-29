@@ -1,7 +1,5 @@
 package hello.com.plantynet.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hello.com.plantynet.domain.DeliveryCode;
 import hello.com.plantynet.domain.Item;
 import hello.com.plantynet.domain.dto.ItemDto;
 import hello.com.plantynet.service.ItemService;
+import hello.com.plantynet.service.utils.ResourceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,27 +33,23 @@ public class JspController {
 	public static final String DEFAULT_GLOBAL_MESSAGE = "필수값을 확인해주세요";
 	private final ItemService itemService;
 	private final ModelMapper modelMapper;
+	private final ResourceUtil resourceUtil;
 
 	@ModelAttribute("deliveryCodes")
 	public List<DeliveryCode> deliveryCodes() {
-		List<DeliveryCode> deliveryCodes = new ArrayList<>();
-		deliveryCodes.add(new DeliveryCode("FAST", "빠른 배송"));
-		deliveryCodes.add(new DeliveryCode("NORMAL", "일반 배송"));
-		deliveryCodes.add(new DeliveryCode("SLOW", "느린 배송"));
-		return deliveryCodes;
+		return resourceUtil.getDeliveryCodes();
 	}
 
 	@ModelAttribute("regions")
 	public Map<String, String> regions() {
-		Map<String, String> regions = new HashMap<>();
-		regions.put("JEJU", "제주도");
-		regions.put("SEOUL", "서울");
-		regions.put("BUSAN", "부산");
-		return regions;
+		return resourceUtil.getRegions();
 	}
 
 	@GetMapping
-	public String index() {
+	public String index(@RequestParam(required = false) boolean error, Model model) {
+		if (error) {
+			model.addAttribute("accessDenied", true);
+		}
 		return "index";
 	}
 
@@ -73,7 +69,7 @@ public class JspController {
 			return "addForm";
 		}
 		itemService.save(modelMapper.map(itemDto, Item.class));
-		return index();
+		return "index";
 	}
 
 	@GetMapping("/list")

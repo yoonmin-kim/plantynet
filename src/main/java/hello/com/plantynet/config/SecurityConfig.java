@@ -10,11 +10,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hello.com.plantynet.domain.dto.ResponseDto;
 import hello.com.plantynet.repository.UserMapper;
 import hello.com.plantynet.security.JwtRequestFilter;
 import hello.com.plantynet.security.MyAuthenticationProvider;
@@ -29,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final UserMapper userMapper;
 	private final JwtRequestFilter jwtRequestFilter;
+	private String[] permitAllArr = {"/api/login", "/api/logout", "/api/register", "/api/roles", "/user/**"};
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,10 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		if ("Y".equals(System.getProperty("apiModeYn"))) {
+			http.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		}
 
 		http.authorizeRequests()
-			.antMatchers("/api/**", "/user/**").permitAll()
+			.antMatchers(permitAllArr).permitAll()
 			.antMatchers("/**/editList").access("hasRole('MANAGER') or hasRole('ADMIN')")
 			.antMatchers("/**/deleteList").hasRole("ADMIN")
 			.anyRequest().authenticated();
@@ -64,18 +73,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.exceptionHandling()
 			.authenticationEntryPoint((request, response, authException) -> {
+				String requestURI = request.getRequestURI();
+				log.info("requestURI={}", requestURI);
 				log.info("로그인 인증에 실패하였습니다.");
-				response.sendRedirect("/user/login");
+
+				if (requestURI.indexOf("api") > 0) {
+					response.setContentType("application/json");
+					response.setCharacterEncoding("utf-8");
+					String result = new ObjectMapper()
+						.writeValueAsString(new ResponseDto("error", "로그인에 실패했습니다.", ""));
+					response.getWriter().print(result);
+				} else {
+					response.sendRedirect("/user/login");
+				}
 			})
 			.accessDeniedHandler((request, response, accessDeniedException) -> {
 				String requestURI = request.getRequestURI();
 				log.info("권한이 부족하여 실행하지 못하였습니다.");
 				if (requestURI.indexOf("jsp") > 0) {
-					response.sendRedirect("/jsp");
+					response.sendRedirect("/jsp?error=true");
 				} else {
-					response.sendRedirect("/thymeleaf");
+					response.sendRedirect("/thymeleaf?error=true");
 				}
 			});
+
 		http.csrf().disable();
 	}
 

@@ -1,6 +1,5 @@
 package hello.com.plantynet.controller;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import hello.com.plantynet.domain.Account;
 import hello.com.plantynet.domain.dto.AccountDto;
 import hello.com.plantynet.security.MyUserDetailsService;
+import hello.com.plantynet.service.utils.ResourceUtil;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -24,14 +24,11 @@ public class UserController {
 	private final MyUserDetailsService userService;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
+	private final ResourceUtil resourceUtil;
 
-	@ModelAttribute("/roles")
+	@ModelAttribute("roles")
 	public Map<String, String> roles() {
-		Map<String, String> regions = new LinkedHashMap<>();
-		regions.put("USER", "ROLE_USER");
-		regions.put("MANAGER", "ROLE_MANAGER");
-		regions.put("ADMIN", "ROLE_ADMIN");
-		return regions;
+		return resourceUtil.getRoles();
 	}
 
 	@GetMapping("/login")

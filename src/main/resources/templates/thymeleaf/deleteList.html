@@ -36,9 +36,8 @@
         </thead>
         <tbody>
         <tr th:each="item : ${items}">
-            <th scope="row"><a th:href="@{/thymeleaf/editForm/{itemId}(itemId=${item.id})}" th:text="${item.id}">1</a>
-            </th>
-            <td><a th:href="@{/thymeleaf/editForm/{itemId}(itemId=${item.id})}" th:text="${item.itemName}">Mark</a></td>
+            <th scope="row" th:text="${item.id}">1</th>
+            <td th:text="${item.itemName}">Mark</td>
             <td th:text="${item.price}">Otto</td>
             <td th:text="${item.quantity}">@mdo</td>
             <td>

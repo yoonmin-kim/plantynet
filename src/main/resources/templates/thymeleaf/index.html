@@ -54,5 +54,11 @@
     </div>
 
 </div>
+
+<script th:inline="javascript">
+    [# th:if= "${accessDenied}"]
+    alert('해당 메뉴에 대한 권한이 없습니다.');
+    [/]
+</script>
 </body>
 </html>
